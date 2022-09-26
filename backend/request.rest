@@ -1,0 +1,57 @@
+GET http://localhost:5000/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXVpZCI6IjczYTM2ZTIxLTNhYjItNDNkOS1hMGI0LWMyNmFjMjg3NGRiNSIsIm5hbWUiOiJha3V5YWFkbWluIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2NjQxODYxMjIsImV4cCI6MTY2NDE4NjE0Mn0.ht8SLyz1p4RQWJYml5bqVJGRdJwwR4u4fO_ZpKjX8Cg
+###
+POST http://localhost:5000/user
+Content-type : application/json
+
+{
+    "name" : "joni",
+    "email" : "joni@gmail.com",
+    "password" : "joni123",
+    "confpassword" : "joni123",
+    "role" : "Member"
+}
+
+###
+GET http://localhost:5000/user
+
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "password" : "akuyaadmin",
+    "email" : "admin@admin.com"
+    
+}
+
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "password" : "joni123",
+    "email" : "joni@gmail.com"
+    
+}
+
+###
+GET http://localhost:5000/me
+
+###
+POST http://localhost:5000/product
+Content-Type: application/json
+
+{
+    "name" : "Product 1",
+    "price" : 123123
+}
+
+###
+GET http://localhost:5000/product
+
+###
+GET http://localhost:5000/product/9fda4090-962e-4446-a238-1e73246727cb
+
+###
+DELETE  http://localhost:5000/logout
