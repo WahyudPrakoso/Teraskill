@@ -1,0 +1,140 @@
+import LearningPath from "../model/LearningPathModel.js";
+// import User from "../model/UserModel.js";
+// import {Op} from "sequelize";
+import multer from "multer";
+// import path from "path";
+import {v4 as uuidv4} from "uuid";
+
+export const getLearningPath = async(req, res) => {
+    try{
+        let response;
+        if(req.role === "Admin"){
+            response = await LearningPath.findAll({
+                attributes : ['uuid','name','desc','image']
+            });
+        }
+        res.status(200).json(response);
+    }catch(error){
+        res.status(500).json({msg : error.message});
+    }
+}
+export const getLearningPathById = async(req, res) => {
+    try{
+        const learningPath = await LearningPath.findOne({
+            where:{
+                uuid:req.params.id
+            }
+        });
+        if(!learningPath) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+
+        let response;
+        if(req.role === "Admin"){
+            response = await LearningPath.findOne({
+                attributes : ['uuid','name','desc','image'],
+                where:{
+                    id: learningPath.id
+                }
+            });
+        }
+        res.status(200).json(response);
+    }catch(error){
+        res.status(500).json({msg : error.message});
+    }
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images/')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname+ "-"+ uuidv4() + path.extname(file.originalname))
+    }
+});
+
+export const uploadImage = multer({
+    storage : storage,
+    limits : {
+        fieldSize : '2000000' // 2mb
+    },
+    fileFilter : (req, file, cb) => {
+        const fileTypes = /jpg|jpeg|png|gif|/
+        const mimeType = fileTypes.test(file.mimetype)
+        const extname = fileTypes.test(path.extname(file.originalname))
+
+        if(mimeType && extname) return cb(null, true);
+
+        cb('Tipe file anda tidak diizinkan');
+    }
+// }).array('file', 2); //bisa 2 file
+}).single('image'); // satu file
+// }).fields([{
+//     name : 'surat_pernyataan',
+//     maxCount : 1
+// },{
+//     name : 'portofolio',
+//     maxCount : 1
+// }])
+export const createLearningPath = async(req, res) => {
+    const {name, desc} = req.body;
+    try{
+        await LearningPath.create({
+            uuid: uuidv4(),
+            name : name,
+            desc : desc,
+            image : req.file.filename
+        });
+        console.log("wes");
+        res.status(201).json({msg : "Data berhasil disimpan!!"})
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
+export const editLearningPath = async(req, res) => {
+    try{
+        const learningPath = await LearningPath.findOne({
+            where:{
+                uuid:req.params.id
+            }
+        });
+        if(!learningPath) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+        // const status = true;
+        // let response;
+        if(req.role === "Admin"){
+            await learningPath.update({
+                status : true
+            },{
+                where:{
+                    id:learningPath.id
+                }
+            });
+        }
+        
+        res.status(200).json({msg:"Berhasil di validasi"});
+    }catch(error){
+        res.status(500).json({msg : error.message});
+    }
+}
+export const deleteLearningPath = async(req, res) => {
+    try{
+        const learningPath = await LearningPath.findOne({
+            where:{
+                uuid:req.params.id
+            }
+        });
+        if(!learningPath) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+        // const {name, price} = req.body;
+        // let response;
+        if(req.role === "Admin"){
+            await learningPath.destroy({
+                where:{
+                    id:learningPath.id
+                }
+            });
+        }
+        
+        res.status(200).json({msg:"Pendaftaran Mentor berhasil dihapus"});
+    }catch(error){
+        res.status(500).json({msg : error.message});
+    }
+}

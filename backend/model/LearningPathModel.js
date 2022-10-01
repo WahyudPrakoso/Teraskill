@@ -21,9 +21,11 @@ const LearningPath = db.define(
         notEmpty: true,
       },
     },
-    file_path: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    desc:{
+      type: DataTypes.TEXT
+    },
+    image: {
+      type: DataTypes.STRING
     },
   },
   {
