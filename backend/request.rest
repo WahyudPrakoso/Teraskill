@@ -1,5 +1,6 @@
 GET http://localhost:5000/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXVpZCI6IjczYTM2ZTIxLTNhYjItNDNkOS1hMGI0LWMyNmFjMjg3NGRiNSIsIm5hbWUiOiJha3V5YWFkbWluIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2NjQxODYxMjIsImV4cCI6MTY2NDE4NjE0Mn0.ht8SLyz1p4RQWJYml5bqVJGRdJwwR4u4fO_ZpKjX8Cg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInV1aWQiOiJkNGQwN2Q0NC1mNWYzLTQ1NzItYjM0Mi1hNDI0YzZkNzY4MTMiLCJuYW1lIjoiQWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTY2NDI2MjU5MSwiZXhwIjoxNjY0MjYyNjA2fQ.9QW0HK6TZDGbnfwXinpe6lbyAfZrn3elcwnIL8jBNwA
+
 ###
 POST http://localhost:5000/user
 Content-type : application/json
@@ -9,7 +10,8 @@ Content-type : application/json
     "email" : "joni@gmail.com",
     "password" : "joni123",
     "confpassword" : "joni123",
-    "role" : "Member"
+    "role" : "Member",
+    "no_hp" : "08765441233"
 }
 
 ###
@@ -55,3 +57,6 @@ GET http://localhost:5000/product/9fda4090-962e-4446-a238-1e73246727cb
 
 ###
 DELETE  http://localhost:5000/logout
+
+###
+GET http://localhost:5000/token

@@ -4,15 +4,18 @@ import {
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    verifyEmail
 } from "../controller/userController.js";
-import { verifyUser, adminOnly, verifyToken } from "../middleware/AuthUser.js";
+import { verifyUser, adminOnly } from "../middleware/AuthUser.js";
+import User from "../model/UserModel.js";
 
 const router = express.Router(); 
 
-router.get('/user',verifyToken ,verifyUser, adminOnly, getUser);
+router.get('/user/verify-email', verifyEmail);
+router.get('/user' ,verifyUser, adminOnly, getUser);
 router.get('/user/:id',verifyUser, adminOnly, getUserById);
-router.post('/user',verifyUser, adminOnly, createUser);
+router.post('/user', createUser);
 router.patch('/user/:id',verifyUser, adminOnly, updateUser);
 router.delete('/user/:id',verifyUser, adminOnly, deleteUser);
 
