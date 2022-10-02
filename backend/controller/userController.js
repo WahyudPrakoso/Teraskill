@@ -43,7 +43,7 @@ var transporter = nodemailer.createTransport({
 });
 
 export const createUser = async(req, res) =>{
-    const {name, email, password, confpassword, role, no_hp} = req.body;
+    const {name, email, password, confpassword, no_hp} = req.body;
     if(password !== confpassword) return res.status(400).json({msg: "Password dan Confirm Password tidak cocok"});
     const hashPassword = await argon2.hash(password);
     let verifyEmail = crypto.randomBytes(64).toString('hex');
@@ -63,7 +63,7 @@ export const createUser = async(req, res) =>{
             name: name,
             email: email,
             password: hashPassword,
-            role: role,
+            role: 'Member',
             no_hp : no_hp,
             is_verified : false,
             verify_email : verifyEmail
