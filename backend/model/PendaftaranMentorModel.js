@@ -4,7 +4,7 @@ import User from "./UserModel.js";
 
 const { DataTypes } = Sequelize;
 
-const PendaftaranMentor = db.sequelize.define(
+const PendaftaranMentor = db.define(
   "pendaftaran_mentor",
   {
     uuid: {

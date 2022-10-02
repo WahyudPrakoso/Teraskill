@@ -3,7 +3,7 @@ import db from "../config/Database.js";
 
 const { DataTypes } = Sequelize;
 
-const LearningPath = db.sequelize.define(
+const LearningPath = db.define(
   "learning_path",
   {
     uuid: {

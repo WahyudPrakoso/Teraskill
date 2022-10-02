@@ -4,6 +4,7 @@ import argon2 from "argon2";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import Sequelize from "sequelize";
+import {v4 as uuidv4} from "uuid";
 // const sequelize = new 
 // const argon2 = require('argon2');
 
@@ -48,6 +49,7 @@ export const createUser = async(req, res) =>{
     const hashPassword = await argon2.hash(password);
     let verifyEmail = crypto.randomBytes(64).toString('hex');
 
+    // console.log(`${name} - ${email} - ${hashPassword} - ${no_hp} - ${verifyEmail}`);
     // let checkVerification = async(verificationCode) => {
     //    return await sequelize.query(`Select from user where verify_email = ${verificationCode}`); 
     // }
@@ -60,14 +62,18 @@ export const createUser = async(req, res) =>{
 
     try {
         await User.create({
+            uuid : uuidv4(),
             name: name,
             email: email,
-            password: hashPassword,
-            role: 'Member',
             no_hp : no_hp,
+            password: hashPassword,
+            role: "Member",
+            avatar: '',
             is_verified : false,
             verify_email : verifyEmail
         });
+
+// console.log("ssdfsdfsdfsdf");
 
         var mailOptions = {
             from : ` "Verify your email " <teraskill.cs@gmail.com> `,
@@ -86,7 +92,7 @@ export const createUser = async(req, res) =>{
         res.status(201).json({msg : "Verification email link is sent to your email"});
         // res.status(201).json({msg: "Register Berhasil"});
     } catch (error) {
-        res.status(400).json({msg: error.message});
+        res.status(400).json({msg: error});
     }
 }
 
@@ -97,9 +103,9 @@ export const verifyEmail = async(req, res) => {
             verify_email : token
         });
         if(user){
-            await db.sequelize.query(`update user set is_verified = 1, verify_email = null where verify_email = '${token}'`,{
+            await db.query(`update user set is_verified = 1, verify_email = null where verify_email = '${token}'`,{
                 raw : true,
-                type : db.sequelize.QueryTypes.UPDATE
+                type : db.QueryTypes.UPDATE
             });
             // await user.update({
             //     verify_email : null,

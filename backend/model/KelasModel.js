@@ -5,7 +5,7 @@ import Users from "./UserModel.js";
 
 const { DataTypes } = Sequelize;
 
-const Kelas = db.sequelize.define(
+const Kelas = db.define(
   "kelas",
   {
     uuid: {
