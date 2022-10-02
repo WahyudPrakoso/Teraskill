@@ -108,19 +108,23 @@ export const uploadFile = multer({
 },{
     name : 'portofolio',
     maxCount : 1
-}])
+}]);
 export const createPendaftaranMentor = async(req, res) => {
    
-    // Array.isArray(req.files)
-    let surat_pernyataan_filename = req.files.surat_pernyataan.map(function(file){
-        return file.filename;
-    });
-    let portofolio_filename = req.files.portofolio.map(function(file){
-        return file.filename;
-    });
-    // console.log(surat_pernyataan_filename[0]);
-    // console.log(portofolio_filename[0]);
+    
     try{
+        if(req.files.surat_pernyataan === undefined || req.files.portofolio === undefined){
+            res.status(404).json({msg : "file gagal diupload"})
+        }
+        // Array.isArray(req.files)
+        let surat_pernyataan_filename = req.files.surat_pernyataan.map(function(file){
+            return file.filename;
+        });
+        let portofolio_filename = req.files.portofolio.map(function(file){
+            return file.filename;
+        });
+        // console.log(surat_pernyataan_filename[0]);
+        // console.log(portofolio_filename[0]);
         await PendaftaranMentor.create({
             uuid: uuidv4(),
             surat_pernyataan : surat_pernyataan_filename[0],
@@ -128,7 +132,7 @@ export const createPendaftaranMentor = async(req, res) => {
             userId : req.userId,
             status : false
         });
-        console.log("wes");
+        // console.log("wes");
         res.status(201).json({msg : "Data berhasil disimpan!!"})
     }catch(error){
         console.log(error.message);

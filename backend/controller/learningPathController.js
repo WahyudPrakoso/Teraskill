@@ -2,7 +2,7 @@ import LearningPath from "../model/LearningPathModel.js";
 // import User from "../model/UserModel.js";
 // import {Op} from "sequelize";
 import multer from "multer";
-// import path from "path";
+import path from "path";
 import {v4 as uuidv4} from "uuid";
 
 export const getLearningPath = async(req, res) => {
@@ -75,16 +75,33 @@ export const uploadImage = multer({
 //     maxCount : 1
 // }])
 export const createLearningPath = async(req, res) => {
-    const {name, desc} = req.body;
+    
+    // console.log(req.file.filename);
     try{
-        await LearningPath.create({
-            uuid: uuidv4(),
-            name : name,
-            desc : desc,
-            image : req.file.filename
-        });
-        console.log("wes");
-        res.status(201).json({msg : "Data berhasil disimpan!!"})
+        const {name, desc} = req.body;
+        if(req.file.filename === undefined){
+            if(req.role == "Admin"){
+                await LearningPath.create({
+                    uuid: uuidv4(),
+                    name : name,
+                    desc : desc
+                });
+                // console.log("wes");
+                res.status(201).json({msg : "Data berhasil disimpan tanpa gambar!!"})
+            }else{res.status(403).json({msg:"akses dilarang!!"})}
+        }else{
+            if(req.role == "Admin"){
+                await LearningPath.create({
+                    uuid: uuidv4(),
+                    name : name,
+                    desc : desc,
+                    image : req.file.filename
+                });
+                // console.log("wes");
+                res.status(201).json({msg : "Data berhasil disimpan!!"})
+            }else{res.status(403).json({msg:"akses dilarang!!"})}
+        }
+        
     }catch(error){
         console.log(error.message);
     }
@@ -100,17 +117,43 @@ export const editLearningPath = async(req, res) => {
         if(!learningPath) return res.status(404).json({msg : "Data tidak ditemukan!!"});
         // const status = true;
         // let response;
-        if(req.role === "Admin"){
-            await learningPath.update({
-                status : true
-            },{
-                where:{
-                    id:learningPath.id
-                }
+        const {name, desc} = req.body
+        if(req.files.surat_pernyataan === undefined || req.files.portofolio === undefined){
+            if(req.role == "Admin"){
+                await learningPath.update({
+                    name : name,
+                    desc : desc
+                },{
+                    where:{
+                        id:learningPath.id
+                    }
+                });
+            }else{
+                res.status(403).json({msg : "akses dilarang !!"});
+            }
+            res.status(200).json({msg:"Data berhasil disimpan tanpa gambar"});
+            // res.status(404).json({msg : "file gagal diupload"});
+        }else{
+            let surat_pernyataan_filename = req.files.surat_pernyataan.map(function(file){
+                return file.filename;
             });
+            let portofolio_filename = req.files.portofolio.map(function(file){
+                return file.filename;
+            });
+            if(req.role == "Admin"){
+                await learningPath.update({
+                    name : name,
+                    desc : desc,
+                    image : req.file.filename
+                },{
+                    where:{
+                        id:learningPath.id
+                    }
+                });
+                res.status(200).json({msg:"Data berhasil disimpan"});
+            }else{res.status(403).json({msg:"akses dilarang!!"})}
         }
-        
-        res.status(200).json({msg:"Berhasil di validasi"});
+       
     }catch(error){
         res.status(500).json({msg : error.message});
     }
@@ -131,9 +174,10 @@ export const deleteLearningPath = async(req, res) => {
                     id:learningPath.id
                 }
             });
-        }
+            res.status(200).json({msg:"Pendaftaran Mentor berhasil dihapus"});
+        }else{res.status(403).json({msg:"akses dilarang!!"})}
         
-        res.status(200).json({msg:"Pendaftaran Mentor berhasil dihapus"});
+        
     }catch(error){
         res.status(500).json({msg : error.message});
     }

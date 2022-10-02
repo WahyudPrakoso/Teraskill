@@ -1,11 +1,11 @@
 import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
 import LearningPath from "./LearningPathModel.js";
-import Users from "./UsersModel.js";
+import Users from "./UserModel.js";
 
 const { DataTypes } = Sequelize;
 
-const Kelas = db.define(
+const Kelas = db.sequelize.define(
   "kelas",
   {
     uuid: {
@@ -55,7 +55,7 @@ const Kelas = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    is_viewed: {
+    is_published: {
       type: DataTypes.BOOLEAN,
     },
     jml_Materi_text: {
