@@ -185,6 +185,52 @@ export const createKelas = async(req, res) => {
     }
 }
 
+export const vadlidateKelas = async(req, res) => {
+    try{
+        const kelas = await Kelas.findOne({
+            where:{
+                uuid:req.params.id
+            }
+        });
+        if(!kelas) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+        // const status = true;
+        // let response;
+        // const {name, desc} = req.body
+        if(!req.file){
+            if(req.role == "Admin"){
+                await kelas.update({
+                    is_published : true
+                },{
+                    where:{
+                        id:kelas.id
+                    }
+                });
+                
+            res.status(200).json({msg:"Kelas tervalidasi!"});
+            }else{
+                res.status(403).json({msg : "akses dilarang !!"});
+            }
+            // res.status(404).json({msg : "file gagal diupload"});
+        }else{
+            if(req.role == "Admin"){
+                await learningPath.update({
+                    name : name,
+                    desc : desc,
+                    image : req.file.filename
+                },{
+                    where:{
+                        id:learningPath.id
+                    }
+                });
+                res.status(200).json({msg:"Data berhasil disimpan"});
+            }else{res.status(403).json({msg:"akses dilarang!!"})}
+        }
+       
+    }catch(error){
+        res.status(500).json({msg : error.message});
+    }
+}
+
 export const editKelas = async(req, res) => {
     try{
         const kelas = await Kelas.findOne({

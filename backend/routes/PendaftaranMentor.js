@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/gabung-mentor',verifyUser, getPendaftaranMentor);
 router.get('/gabung-mentor/:id',verifyUser,  getPendaftaranMentorById);
 router.post('/gabung-mentor',verifyUser, uploadFile, createPendaftaranMentor);
-router.patch('/validasi-mentor/:id',verifyUser,  validasiPendaftaranMentor);
+router.patch('/gabung-mentor/validasi/:id',verifyUser,  validasiPendaftaranMentor);
 router.delete('/gabung-mentor/:id',verifyUser,  deletePendaftaranMentor);
 
 export default router;
