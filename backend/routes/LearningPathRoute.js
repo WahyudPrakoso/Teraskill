@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/learning-path',verifyUser, getLearningPath);
 router.get('/learning-path/:id',verifyUser,  getLearningPathById);
 router.post('/learning-path',verifyUser, uploadImage, createLearningPath);
-router.patch('/learning-path/:id',verifyUser,  editLearningPath);
+router.patch('/learning-path/:id',verifyUser,  uploadImage, editLearningPath);
 router.delete('/learning-path/:id',verifyUser,  deleteLearningPath);
 
 export default router;
