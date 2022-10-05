@@ -5,6 +5,7 @@ import {Op} from "sequelize";
 import multer from "multer";
 import path from "path";
 import {v4 as uuidv4} from "uuid";
+import Modul from "../model/ModulModel.js";
 
 export const getKelas = async(req, res) => {
     try{
@@ -133,52 +134,57 @@ export const uploadImage = multer({
 export const createKelas = async(req, res) => {
     
     try{
-        const userId = req.userId;
-        const {learningPathId, name, about, price, type, tools, link_grub} = req.body;
-        if(req.files.image || req.files.image_bg){
-            let image_filename = req.files.image.map(function(file){
-                return file.filename;
-            });
-            let image_bg_filename = req.files.image_bg.map(function(file){
-                return file.filename;
-            });
-            console.log(image_filename + " dan "+ image_bg_filename);
-            console.log(learningPathId  + " dan "+ name+ " dan "+ type+ " dan "+price+ " dan "+about+ " dan "+tools);
-            await Kelas.create({
-                uuid: uuidv4(),
-                learningPathId : learningPathId,
-                userId : userId, 
-                name : name,
-                type : type,
-                price : price,
-                about : about,
-                tools : tools,
-                image : image_filename+'',
-                image_bg : image_bg_filename+'',
-                is_published : 0,
-                jml_Materi_text : 0,
-                jml__materi_video : 0,
-                link_grub : link_grub
-            });
-            res.status(201).json({msg : "Data berhasil disimpan!!"})
-            res.status(404).json({msg : "file gagal diupload"})
-        }else{
-            console.log("wes");
-            await Kelas.create({
-                uuid: uuidv4(),
-                learningPathId : learningPathId,
-                userId : userId, 
-                name : name,
-                type : type,
-                price : price,
-                about : about,
-                tools : tools,
-                is_published : false,
-                jml_Materi_text : 0,
-                jml__materi_video : 0
-            });
-            res.status(201).json({msg : "Data berhasil disimpan tanpa gambar!!"})
-            // res.status(404).json({msg : "file gagal diupload"})
+        if(req.role === "Admin"){
+            const userId = req.userId;
+            const {learningPathId, name, about, price, type, tools, link_grub} = req.body;
+            if(req.files.image || req.files.image_bg){
+                let image_filename = req.files.image.map(function(file){
+                    return file.filename;
+                });
+                let image_bg_filename = req.files.image_bg.map(function(file){
+                    return file.filename;
+                });
+                console.log(image_filename + " dan "+ image_bg_filename);
+                console.log(learningPathId  + " dan "+ name+ " dan "+ type+ " dan "+price+ " dan "+about+ " dan "+tools);
+                await Kelas.create({
+                    uuid: uuidv4(),
+                    learningPathId : learningPathId,
+                    userId : userId, 
+                    name : name,
+                    type : type,
+                    price : price,
+                    about : about,
+                    tools : tools,
+                    image : image_filename+'',
+                    image_bg : image_bg_filename+'',
+                    is_published : 0,
+                    jml_Materi_text : 0,
+                    jml__materi_video : 0,
+                    link_grub : link_grub
+                });
+                res.status(201).json({msg : "Data berhasil disimpan!!"})
+                res.status(404).json({msg : "file gagal diupload"})
+            }else{
+                console.log("wes");
+                await Kelas.create({
+                    uuid: uuidv4(),
+                    learningPathId : learningPathId,
+                    userId : userId, 
+                    name : name,
+                    type : type,
+                    price : price,
+                    about : about,
+                    tools : tools,
+                    is_published : false,
+                    jml_Materi_text : 0,
+                    jml__materi_video : 0
+                });
+                res.status(201).json({msg : "Data berhasil disimpan tanpa gambar!!"})
+                // res.status(404).json({msg : "file gagal diupload"})
+            }
+           
+        } else{
+            res.status(403).json({msg : "akses dialrang"});
         }
     }catch(error){
         console.log(error.message);

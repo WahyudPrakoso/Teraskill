@@ -32,7 +32,7 @@ const Materi_Text = db.define(
   }
 );
 
-Modul.hasOne(Materi_Text);
+// Modul.hasOne(Materi_Text);
 Materi_Text.belongsTo(Modul, { foreignKey: "modulId" });
 
 export default Materi_Text;

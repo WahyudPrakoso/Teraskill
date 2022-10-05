@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import db from "../config/Database.js";
+import db from "../config/database.js";
 import Kelas_User from "./KelasUserModel.js";
 
 const { DataTypes } = Sequelize;

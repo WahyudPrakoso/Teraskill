@@ -7,7 +7,7 @@ import {
     deleteKelas,
     uploadImage,
     vadlidateKelas,
-} from "../controller/kelasController.js";
+} from "../controller/KelasController.js";
 import { verifyUser } from "../middleware/AuthUser.js";
 
 const router = express.Router(); 
