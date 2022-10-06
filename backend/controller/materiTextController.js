@@ -25,9 +25,6 @@ export const getMateriText = async(req, res) => {
             response = await Modul.findAll(
             {
                 attributes : ['uuid','content'],
-                where :{
-                    kelasId : req.KelasId
-                },
                 include:{
                     model : Modul,
 
@@ -61,7 +58,7 @@ export const getMateriTextById = async(req, res) => {
 
         let response;
         if(req.role === "Admin"){
-            response = await Materi_Text.findAll({
+            response = await Materi_Text.findOne({
                 attributes : ['uuid','content'],
                 include:{
                     model : Modul, 

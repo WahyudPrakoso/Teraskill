@@ -12,8 +12,9 @@ import ModulRoute from "./routes/ModulRoute.js"
 import AuthRoute from "./routes/AuthRoute.js";
 import MateriVideoRoute from "./routes/MateriVideoRoute.js";
 import MateriTextRoute from "./routes/MateriTextRoute.js";
+import SoalProjekRoute from "./routes/SoalProjekRoute.js";
 import db from "./config/database.js";
-// import Materi_Text from "./model/Materi_TextModel.js"
+// import SoalProjek from "./model/SoalProjekModel.js"
 dotenv.config();
 
 const app = express();
@@ -55,10 +56,11 @@ app.use(KelasRoute);
 app.use(ModulRoute);
 app.use(MateriTextRoute);
 app.use(MateriVideoRoute);
+app.use(SoalProjekRoute);
 app.use(AuthRoute);
 
 app.use('document', express.static('./document'));
-// Materi_Video.sync();
+// SoalProjek.sync();
 
 app.listen(process.env.APP_PORT, () => {
     console.log('Server up and running');

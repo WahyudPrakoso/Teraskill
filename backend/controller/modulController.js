@@ -25,9 +25,6 @@ export const getModul = async(req, res) => {
             response = await Modul.findAll(
             {
                 attributes : ['uuid','name','desc','urutan'],
-                where :{
-                    kelasId : req.KelasId
-                },
                 include:{
                     model : Kelas,
 

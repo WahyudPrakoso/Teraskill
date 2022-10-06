@@ -25,9 +25,6 @@ export const getMateriVideo = async(req, res) => {
             response = await Modul.findAll(
             {
                 attributes : ['uuid','link'],
-                where :{
-                    kelasId : req.KelasId
-                },
                 include:{
                     model : Modul,
 
@@ -61,7 +58,7 @@ export const getMateriVideoById = async(req, res) => {
 
         let response;
         if(req.role === "Admin"){
-            response = await Materi_Video.findAll({
+            response = await Materi_Video.findOne({
                 attributes : ['uuid','link'],
                 include:{
                     model : Modul, 

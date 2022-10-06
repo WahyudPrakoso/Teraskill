@@ -99,6 +99,51 @@ export const getKelasById = async(req, res) => {
     }
 }
 
+export const getKelasByUserId = async(req, res) => {
+    try{
+        const user = await User.findOne({
+            where:{
+                uuid:req.params.id
+            }
+        });
+        // console.log("sudah ini");
+        if(!user) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+        
+        let response;
+        if(req.role === "Admin"){
+            response = await Kelas.findAll({
+                attributes : ['uuid','name','about','image','image_bg','price','is_published','link_grub'],
+                where:{
+                    Userid: user.id
+                    
+                },
+                include:{
+                    model : User,
+                    attributes : ['name']
+                }
+            });
+        }
+        else if(req.role === "Mentor"){
+            response = await Kelas.findAll({
+                attributes : ['uuid','name','about','image','image_bg','price','is_published','link_grub'],
+                where:{
+                    [Op.and] : [{userId: user.id}, {userId : req.userId}]
+                },
+                include:{
+                    model : User,
+                    attributes : ['name']
+                }
+            })
+        }
+        else{
+            res.status(403).json({msg :"akses dilarang!"});
+        }
+        res.status(200).json(response);
+    }catch(error){
+        res.status(500).json({msg : error.message});
+    }
+}
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images/')
