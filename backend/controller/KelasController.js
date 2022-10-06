@@ -159,7 +159,7 @@ export const uploadImage = multer({
         fieldSize : '2000000' // 2mb
     },
     fileFilter : (req, file, cb) => {
-        const fileTypes = /jpg|jpeg|png|gif|/
+        const fileTypes = /jpg|jpeg|png|gif/
         const mimeType = fileTypes.test(file.mimetype)
         const extname = fileTypes.test(path.extname(file.originalname))
         

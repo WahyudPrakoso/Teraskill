@@ -8,6 +8,14 @@ const { DataTypes } = Sequelize;
 const UserAnswerProjek = db.define(
   "user_aswer_projek",
   {
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -15,14 +23,14 @@ const UserAnswerProjek = db.define(
         notEmpty: true,
       },
     },
-    soalId:{
+    soalProjekId:{
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    jawaban: {
+    projek: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -34,7 +42,7 @@ const UserAnswerProjek = db.define(
 
 User.hasMany(UserAnswerProjek);
 SoalProjek.hasOne(UserAnswerProjek);
-UserAnswerProjek.belongsTo(SoalProjek, { foreignKey: "kelasId" });
+UserAnswerProjek.belongsTo(SoalProjek, { foreignKey: "soalProjekId" });
 UserAnswerProjek.belongsTo(User, { foreignKey: "userId" });
 
 export default UserAnswerProjek;

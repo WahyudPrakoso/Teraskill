@@ -129,7 +129,7 @@ export const getMateriVideoByModulId = async(req, res) => {
             });
         }
         // else if(req.role === "Mentor"){
-        //     response = await Modul.findAll({
+        //     response = await Materi_Video.findAll({
         //         attributes : ['uuid','name','desc','urutan'],
         //         where:{
         //             [Op.and] : [{kelasId: kelas.id}, {user_id : req.userId}]

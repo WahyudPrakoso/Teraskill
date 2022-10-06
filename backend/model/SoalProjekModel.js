@@ -7,6 +7,14 @@ const { DataTypes } = Sequelize;
 const SoalProjek = db.define(
   "soal_projek",
   {
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
     kelasId: {
       type: DataTypes.INTEGER,
       allowNull: false,

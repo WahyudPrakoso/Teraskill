@@ -1,13 +1,13 @@
 import Kelas from "../model/KelasModel.js";
-import SoalProjek from "../model/SoalProjekModel.js";
+import SoalExam from "../model/SoalExamModel.js";
 import {Op} from "sequelize";
 import {v4 as uuidv4} from "uuid";
 
-export const getSoalProjek = async(req, res) => {
+export const getSoalExam = async(req, res) => {
     try{
         let response;
         if(req.role === "Admin"){
-            response = await SoalProjek.findAll({
+            response = await SoalExam.findAll({
                 attributes : ['uuid','soal'],
                 include :{
                     model : Kelas,
@@ -15,7 +15,7 @@ export const getSoalProjek = async(req, res) => {
                 }
             });
         }else if(req.role === "Mentor"){
-            response = await SoalProjek.findAll(
+            response = await SoalExam.findAll(
             {
                 attributes : ['uuid','soal'],
                 include :{
@@ -34,29 +34,29 @@ export const getSoalProjek = async(req, res) => {
         res.status(500).json({msg : error.message});
     }
 }
-export const getSoalProjekById = async(req, res) => {
+export const getSoalExamById = async(req, res) => {
     try{
-        const soalProjek = await SoalProjek.findOne({
+        const soalExam = await SoalExam.findOne({
             where:{
                 uuid:req.params.id
             }
         });
-        if(!soalProjek) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+        if(!soalExam) return res.status(404).json({msg : "Data tidak ditemukan!!"});
 
         let response;
         if(req.role === "Admin"){
-            response = await SoalProjek.findOne({
+            response = await SoalExam.findOne({
                 attributes : ['uuid','soal'],
                 include :{
                     model : Kelas,
                     attributes : ['name']
                 },
                 where:{
-                    id : soalProjek.id
+                    id : soalExam.id
                 }
             });
         }else if(req.role === "Mentor"){
-            response = await SoalProjek.findAll(
+            response = await SoalExam.findAll(
             {
                 attributes : ['uuid','soal'],
                 include :{
@@ -67,7 +67,7 @@ export const getSoalProjekById = async(req, res) => {
                     }
                 },
                 where : {
-                    id : soalProjek.id
+                    id : soalExam.id
                 }
             });
         }else{
@@ -79,7 +79,52 @@ export const getSoalProjekById = async(req, res) => {
     }
 }
 
-export const createSoalProjek = async(req, res) => {
+export const getSoalExamByKelasId = async(req, res) => {
+    try{
+        const kelas = await Kelas.findOne({
+            where:{
+                uuid:req.params.id
+            }
+        });
+        // console.log("sudah ini");
+        if(!kelas) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+        
+        let response;
+        if(req.role === "Admin" || req.role === "Mentor"){
+            response = await SoalExam.findAll({
+                attributes : ['uuid','soal'],
+                where:{
+                    kelasid: kelas.id
+                    
+                },
+                include:{
+                    model : Kelas,
+                    attributes : ['name']
+                }
+            });
+        }
+        // else if(req.role === "Mentor"){
+        //     response = await SoalExam.findAll({
+        //         attributes : ['uuid','name','desc','urutan'],
+        //         where:{
+        //             [Op.and] : [{kelasId: kelas.id}, {user_id : req.userId}]
+        //         },
+        //         include:{
+        //             model : Kelas,
+        //             attributes : ['name']
+        //         }
+        //     })
+        // }
+        else{
+            res.status(403).json({msg :"akses dilarang!"});
+        }
+        res.status(200).json(response);
+    }catch(error){
+        res.status(500).json({msg : error.message});
+    }
+}
+
+export const createSoalExam = async(req, res) => {
    
     const {soal, kelasId} = req.body;
     // console.log(soal, kelasId);
@@ -87,7 +132,7 @@ export const createSoalProjek = async(req, res) => {
     try{
         // console.log("1");
         if(req.role === "Admin" || req.role === "Mentor"){
-            await SoalProjek.create({
+            await SoalExam.create({
                 uuid : uuidv4(),
                 soal : soal,
                 kelasId : kelasId,
@@ -102,9 +147,9 @@ export const createSoalProjek = async(req, res) => {
         error;
     }
 }
-export const updateSoalProjek = async(req, res) => {
+export const updateSoalExam = async(req, res) => {
     try{
-        const soalProjek = await SoalProjek.findOne({
+        const soalExam = await SoalExam.findOne({
             where:{
                 uuid:req.params.id
             },
@@ -116,20 +161,20 @@ export const updateSoalProjek = async(req, res) => {
                 }
             }
         });
-        if(!soalProjek) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+        if(!soalExam) return res.status(404).json({msg : "Data tidak ditemukan!!"});
         const {soal, kelasId} = req.body;
         let response;
         if(req.role === "Admin"){
-            await SoalProjek.update({soal, kelasId},{
+            await SoalExam.update({soal, kelasId},{
                 where:{
-                    id:soalProjek.id
+                    id:soalExam.id
                 }
             });
         }else{
-            if(req.userId !== soalProjek.userId) return res.status(403).json({msg : "akses dilarang!!"});
-            await SoalProjek.update({soal, kelasId},{
+            if(req.userId !== soalExam.userId) return res.status(403).json({msg : "akses dilarang!!"});
+            await SoalExam.update({soal, kelasId},{
                 where :{
-                    id: soalProjek.id
+                    id: soalExam.id
                 },
                 include:{
                     model : Kelas,
@@ -143,20 +188,20 @@ export const updateSoalProjek = async(req, res) => {
         res.status(500).json({msg : error.message});
     }
 }
-export const deleteSoalProjek = async(req, res) => {
+export const deleteSoalExam = async(req, res) => {
     try{
-        const soalProjek = await SoalProjek.findOne({
+        const soalExam = await SoalExam.findOne({
             where:{
                 uuid:req.params.id
             }
         });
-        if(!soalProjek) return res.status(404).json({msg : "Data tidak ditemukan!!"});
+        if(!soalExam) return res.status(404).json({msg : "Data tidak ditemukan!!"});
         // const {name, desc, urutan} = req.body;
         // let response;
         if(req.role === "Admin" || req.role === "Mentor"){
-            await SoalProjek.destroy({
+            await SoalExam.destroy({
                 where:{
-                    id:soalProjek.id
+                    id:soalExam.id
                 }
             });
         }else{

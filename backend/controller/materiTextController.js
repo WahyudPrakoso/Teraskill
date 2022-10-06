@@ -199,7 +199,7 @@ export const updateMateriText = async(req, res) => {
             });
         }else{
             if(req.userId !== materiText.userId) return res.status(403).json({msg : "akses dilarang!!"});
-            await Modul.update({content, modulId},{
+            await Materi_Text.update({content, modulId},{
                 where :{
                     id: materiText.id
                 },

@@ -13,8 +13,13 @@ import AuthRoute from "./routes/AuthRoute.js";
 import MateriVideoRoute from "./routes/MateriVideoRoute.js";
 import MateriTextRoute from "./routes/MateriTextRoute.js";
 import SoalProjekRoute from "./routes/SoalProjekRoute.js";
+import SoalExamRoute from "./routes/SoalExamRoute.js";
+import OptionExamRoute from "./routes/OptionExamRoute.js";
+import UserAnswerProjekRoute from "./routes/UserAnswerProjekRoute.js";
 import db from "./config/database.js";
-// import SoalProjek from "./model/SoalProjekModel.js"
+// import SoalExam from "./model/SoalExamModel.js";
+// import OptionExam from "./model/OptionExamModel.js";
+// import UserAnswerProjek from "./model/UserAnswerProjekModel.js"
 dotenv.config();
 
 const app = express();
@@ -57,10 +62,13 @@ app.use(ModulRoute);
 app.use(MateriTextRoute);
 app.use(MateriVideoRoute);
 app.use(SoalProjekRoute);
+app.use(UserAnswerProjekRoute);
+app.use(SoalExamRoute);
+app.use(OptionExamRoute);
 app.use(AuthRoute);
 
 app.use('document', express.static('./document'));
-// SoalProjek.sync();
+// SoalExam.sync();OptionExam.sync();
 
 app.listen(process.env.APP_PORT, () => {
     console.log('Server up and running');
