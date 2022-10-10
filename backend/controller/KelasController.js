@@ -189,8 +189,8 @@ export const createKelas = async(req, res) => {
                 let image_bg_filename = req.files.image_bg.map(function(file){
                     return file.filename;
                 });
-                console.log(image_filename + " dan "+ image_bg_filename);
-                console.log(learningPathId  + " dan "+ name+ " dan "+ type+ " dan "+price+ " dan "+about+ " dan "+tools);
+                // console.log(image_filename + " dan "+ image_bg_filename);
+                // console.log(learningPathId  + " dan "+ name+ " dan "+ type+ " dan "+price+ " dan "+about+ " dan "+tools);
                 await Kelas.create({
                     uuid: uuidv4(),
                     learningPathId : learningPathId,
