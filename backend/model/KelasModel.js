@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import db from "../config/Database.js";
+import db from "../config/database.js";
 import LearningPath from "./LearningPathModel.js";
 import Users from "./UserModel.js";
 
@@ -48,12 +48,10 @@ const Kelas = db.define(
       type: DataTypes.TEXT,
     },
     image: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING
     },
     image_bg: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING
     },
     is_published: {
       type: DataTypes.BOOLEAN,
@@ -64,6 +62,9 @@ const Kelas = db.define(
     jml__materi_video: {
       type: DataTypes.INTEGER,
     },
+    link_grub : {
+      type : DataTypes.STRING
+    }
   },
   {
     freezeTableName: true,

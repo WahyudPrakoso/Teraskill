@@ -47,7 +47,7 @@ const storage = multer.diskStorage({
         cb(null, 'images/')
     },
     filename: (req, file, cb) => {
-        cb(null, file.fieldname+ "-"+ uuidv4() + path.extname(file.originalname))
+        cb(null, file.fieldname+ "-learningPath-"+ uuidv4() + path.extname(file.originalname))
     }
 });
 
@@ -57,7 +57,7 @@ export const uploadImage = multer({
         fieldSize : '2000000' // 2mb
     },
     fileFilter : (req, file, cb) => {
-        const fileTypes = /jpg|jpeg|png|gif|/
+        const fileTypes = /jpg|jpeg|png|gif/
         const mimeType = fileTypes.test(file.mimetype)
         const extname = fileTypes.test(path.extname(file.originalname))
 
@@ -118,7 +118,7 @@ export const editLearningPath = async(req, res) => {
         // const status = true;
         // let response;
         const {name, desc} = req.body
-        if(req.files.surat_pernyataan === undefined || req.files.portofolio === undefined){
+        if(!req.file){
             if(req.role == "Admin"){
                 await learningPath.update({
                     name : name,
@@ -134,12 +134,6 @@ export const editLearningPath = async(req, res) => {
             res.status(200).json({msg:"Data berhasil disimpan tanpa gambar"});
             // res.status(404).json({msg : "file gagal diupload"});
         }else{
-            let surat_pernyataan_filename = req.files.surat_pernyataan.map(function(file){
-                return file.filename;
-            });
-            let portofolio_filename = req.files.portofolio.map(function(file){
-                return file.filename;
-            });
             if(req.role == "Admin"){
                 await learningPath.update({
                     name : name,

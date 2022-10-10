@@ -113,7 +113,7 @@ export const createPendaftaranMentor = async(req, res) => {
    
     
     try{
-        if(req.files.surat_pernyataan === undefined || req.files.portofolio === undefined){
+        if(req.files.surat_pernyataan || req.files.portofolio){
             res.status(404).json({msg : "file gagal diupload"})
         }
         // Array.isArray(req.files)

@@ -6,15 +6,19 @@ import {
     editKelas,
     deleteKelas,
     uploadImage,
-} from "../controller/kelasController.js";
+    vadlidateKelas,
+    getKelasByUserId,
+} from "../controller/KelasController.js";
 import { verifyUser } from "../middleware/AuthUser.js";
 
 const router = express.Router(); 
 
 router.get('/kelas',verifyUser, getKelas);
 router.get('/kelas/:id',verifyUser,  getKelasById);
+router.get('/kelas/user/:id',verifyUser,  getKelasByUserId);
 router.post('/kelas',verifyUser, uploadImage, createKelas);
-router.patch('/kelas/:id',verifyUser,  editKelas);
+router.patch('/kelas/:id',verifyUser, uploadImage, editKelas);
+router.patch('/kelas/validasi/:id',verifyUser, vadlidateKelas);
 router.delete('/kelas/:id',verifyUser,  deleteKelas);
 
 export default router;
